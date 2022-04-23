@@ -259,8 +259,66 @@ class LinkedList:
         current.item = item
 
     def delete_one(self, item: Any) -> None:
-        """ Remove the *first* occurrence of <item> in this LinkedList."""
-        pass
+        """ Remove the *first* occurrence of <item> in this LinkedList.
+
+        Raise ValueError if <item> is not in this LinkedList.
+
+        >>> lst = LinkedList([1, 2, 3])
+        >>> lst.delete_one(2)
+        >>> str(lst)
+        '[1 -> 3]'
+        >>> lst = LinkedList([2, 2, 3])
+        >>> lst.delete_one(2)
+        >>> str(lst)
+        '[2 -> 3]'
+        """
+        if len(self) == 0:
+            raise ValueError
+        if self._first.item == item:
+            self._first = self._first.next
+        curr = self._first
+        while curr is not None:
+            if curr.next.item == item:
+                curr.next = curr.next.next
+                return
+            curr = curr.next
+        raise ValueError
+
+    def delete_all(self, item: Any) -> None:
+        """ Remove *every* occurrence of <item> in this LinkedList.
+
+        Raise ValueError if <item> is not in this LinkedList.
+
+        >>> lst = LinkedList([2, 2, 3])
+        >>> lst.delete_all(2)
+        >>> str(lst)
+        '[3]'
+        >>> lst = LinkedList([1, 2, 3])
+        >>> lst.delete_all(2)
+        >>> str(lst)
+        '[1 -> 3]'
+        """
+        if len(self) == 0:
+            raise ValueError
+
+        found = False
+
+        while self._first.item == item:
+            self._first = self._first.next
+            found = True
+
+        curr = prev = self._first
+        while curr is not None:
+            if curr.item == item:
+                prev.next = curr.next
+                found = True
+                curr = curr.next
+                continue
+            prev = curr
+            curr = curr.next
+        if not found:
+            raise ValueError
+
 
 if __name__ == '__main__':
     import doctest
