@@ -6,6 +6,7 @@
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
+<!--Navbar-->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/">Djerty</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -14,9 +15,28 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
             <a class="nav-item nav-link active" href="/">Home <span class="sr-only">(current)</span></a>
+
+
+            <!--            Data Structure Simulations Dropdown Menu-->
+            <div class="dropdown show">
+                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Data Structure Simulations
+                </a>
+
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="/linked-list">LinkedList</a>
+                    <!--                    <a class="dropdown-item" href="#">Stack</a>-->
+                    <!--                    <a class="dropdown-item" href="#">Queue</a>-->
+                </div>
+            </div>
+
+
             <a class="nav-item nav-link active" href="/quote-engine">QuoteEngine <span class="sr-only">(current)</span></a>
+
             <a class="nav-item nav-link active" href="/hanoi">Hanoi <span class="sr-only">(current)</span></a>
+
             <a class="nav-item nav-link active" href="/linked-list">LinkedList <span class="sr-only">(current)</span></a>
+
             <a class="nav-item nav-link active" href="/about">About <span class="sr-only">(current)</span></a>
         </div>
     </div>

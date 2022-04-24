@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Linked List Simulator (Text-Based){% endblock %}
+{% block body %}
+<h1 style="text-align:center">Linked List Simulator</h1>
+<h4 style="text-align:center">Dynamically adds and removes elements and displays the linked list!</h4>
+
+<!--When this form is submitted, it submits the operation the user would like to-->
+<!--complete (add, remove, etc.), and also passes the current list displayed on the-->
+<!--screen. -->
+<form action="#" method="post" style="text-align:center">
+    <h5>What would you like to do?</h5>
+    <select name="operation" id="operation">
+        <option>Append</option>
+        <option>Insert at the beginning</option>
+        <option>Remove first instance of</option>
+        <option>Remove all instances of</option>
+        <option>Remove item at index</option>
+    </select>
+    <input type="hidden" id="linkedlist" name="linkedlist" value={{list}}>
+    <input type="text" name="value" id="value" placeholder="Value">
+    <p style="text-align:center"><input type="submit" value="Submit"></p>
+</form>
+
+{% if error == "ValueError" %}
+<p style="color:red">That value is not in the linked list. Please try another value.</p>
+{% endif %}
+{% if error == "IndexError" %}
+<p style="color:red">That is not a valid index. Please try another index.</p>
+{% endif %}
+<pre>
+{% if ans != "[]" %}
+    {% autoescape false %}
+        <p>{{ans}}</p>
+    {% endautoescape %}
+{% elif ans == '[]' %}
+    {% autoescape false %}
+        <p>Linked List Is Empty!</p>
+    {% endautoescape %}
+{% endif %}
+
+</pre>
+{% endblock %}

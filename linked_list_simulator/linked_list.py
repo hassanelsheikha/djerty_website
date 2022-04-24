@@ -55,6 +55,7 @@ class LinkedList:
                 current.next = new
                 current = new
                 self._length += 1
+        print(f'len(self) = {len(self)}')
 
     def is_empty(self) -> bool:
         """Return whether this linked list is empty.
@@ -81,6 +82,18 @@ class LinkedList:
             items.append(str(curr.item))
             curr = curr.next
         return '[' + ' -> '.join(items) + ']'
+
+    def __repr__(self):
+        return str(self)
+
+    def join(self):
+        """Return a joined version of this LinkedList (in a string). """
+        ans = []
+        curr = self._first
+        while curr is not None:
+            ans.append(str(curr.item))
+            curr = curr.next
+        return ','.join(ans)
 
     def to_file(self, file_name: str) -> None:
         """ Export a string representation of this LinkedList to a file with
@@ -274,12 +287,15 @@ class LinkedList:
         """
         if len(self) == 0:
             raise ValueError
-        if self._first.item == item:
+        elif self._first.item == item:
             self._first = self._first.next
+            self._length -= 1
+            return
         curr = self._first
         while curr is not None:
             if curr.next.item == item:
                 curr.next = curr.next.next
+                self._length -= 1
                 return
             curr = curr.next
         raise ValueError
@@ -305,6 +321,7 @@ class LinkedList:
 
         while self._first.item == item:
             self._first = self._first.next
+            self._length -= 1
             found = True
 
         curr = prev = self._first
@@ -313,12 +330,29 @@ class LinkedList:
                 prev.next = curr.next
                 found = True
                 curr = curr.next
+                self._length -= 1
                 continue
             prev = curr
             curr = curr.next
         if not found:
             raise ValueError
 
+    def delete_at_index(self, index: int):
+        """ Delete the item at <index>. Raise IndexError if <index> is out of
+        bounds. """
+        print(len(self))
+        print(self)
+        if not (index < len(self)) or index < 0:
+            raise IndexError
+        elif index == 0:
+            self._first = self._first.next
+        else:
+            curr = self._first
+            i = 0
+            while i != index - 1:
+                i += 1
+                curr = curr.next
+            curr.next = curr.next.next
 
 if __name__ == '__main__':
     import doctest
