@@ -3,8 +3,8 @@ from __future__ import annotations
 import time
 
 from typing import Optional, Any
-from huffman import HuffmanTree
-from utils import *
+from huffman_compressor.huffman import HuffmanTree
+from huffman_compressor.utils import *
 
 
 class EmptyStackError(Exception):
