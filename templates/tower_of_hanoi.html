@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Tower of Hanoi Solver{% endblock %}
+{% block body %}
+<h1 style="text-align:center">Tower of Hanoi Solver (With Written Steps)</h1>
+<h4 style="text-align:center">Solves the Tower of Hanoi for up to 9 disks!</h4>
+<form action="#" method="post" style="text-align:center">
+    <h5>How many disks?</h5>
+    <select name="name" id="name">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+        <option>6</option>
+        <option>7</option>
+        <option>8</option>
+        <option>9</option>
+    </select>
+    <p style="text-align:center"><input type="submit" value="Submit"></p>
+    <a href="/about-hanoi" style="text-align:center"><p style="text-align:center">What is this?</p></a>
+</form>
+<pre>
+{% if ans != "" %}
+    {% autoescape false %}
+        <p style="text-align:center">{{ans}}</p>
+    {% endautoescape %}
+{% endif %}
+</pre>
+{% endblock %}

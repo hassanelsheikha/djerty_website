@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, \
     flash, send_file, send_from_directory, abort
 from linked_list_simulator.linked_list import *
 from huffman_compressor.engine import *
+from tower_of_hanoi.tower_of_hanoi import *
 import os
 from datetime import datetime, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -158,6 +159,22 @@ def linked():
     else:
         return render_template("linked_list.html", empty=True,
                                list='[]', error='')
+
+
+@app.route("/hanoi", methods=["POST", "GET"])
+@app.route("/tower-of-hanoi", methods=["POST", "GET"])
+def towers_of_hanoi():
+    if request.method == "POST":
+        n = request.form["name"]
+        ans = hanoi(int(n))
+        return render_template("tower_of_hanoi.html", ans=ans)
+    else:
+        return render_template("tower_of_hanoi.html", ans='')
+
+
+@app.route("/about-hanoi")
+def about_tower_of_hanoi():
+    return render_template("about_hanoi.html")
 
 
 if __name__ == "__main__":
