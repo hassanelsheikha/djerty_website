@@ -27,24 +27,28 @@ def home():
 def huffman():
     if request.method == "POST":
         if request.files:
-            file = request.files['file']
-            file.save(os.path.join(app.config["FILE_UPLOADS"], file.filename))
-            compress_file(os.path.join(app.config["FILE_UPLOADS"],
-                                       file.filename),
-                          os.path.join(app.config["FILE_UPLOADS"],
-                                       file.filename.split('.')[0] + '.djerty'))
-            garbage_files.append(os.path.join(app.config['FILE_UPLOADS'],
+            try:
+                file = request.files['file']
+                file.save(os.path.join(app.config["FILE_UPLOADS"],
+                                       file.filename))
+                compress_file(os.path.join(app.config["FILE_UPLOADS"],
+                                           file.filename),
+                              os.path.join(app.config["FILE_UPLOADS"],
+                                           file.filename.split('.')[0] +
+                                           '.djerty'))
+                garbage_files.append(os.path.join(app.config['FILE_UPLOADS'],
+                                                  file.filename.split('.')[0] +
+                                                  '.djerty'))
+                scheduler.add_job(func=clear_garbage_files,
+                                  next_run_time=datetime.now() +
+                                                timedelta(seconds=10))
+                os.remove(os.path.join(app.config["FILE_UPLOADS"],
+                                       file.filename))
+                return send_file(os.path.join(app.config["FILE_UPLOADS"],
                                               file.filename.split('.')[0] +
                                               '.djerty'))
-            scheduler.add_job(func=clear_garbage_files,
-                              next_run_time=datetime.now() +
-                                            timedelta(seconds=10))
-            os.remove(os.path.join(app.config["FILE_UPLOADS"], file.filename))
-            return send_file(os.path.join(app.config["FILE_UPLOADS"],
-                                          file.filename.split('.')[0] +
-                                          '.djerty'))
-        else:
-            return render_template("huffman.html", error='NoFileError')
+            except FileNotFoundError:
+                return render_template("huffman.html", error='NoFileError')
     return render_template("huffman.html")
 
 
