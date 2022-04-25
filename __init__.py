@@ -1,20 +1,26 @@
-import flask
 from flask import Flask, redirect, url_for, render_template, request, flash, send_file, send_from_directory, abort
 from linked_list_simulator.linked_list import *
 from huffman_compressor.engine import *
 import os
-import io
+from datetime import datetime, timedelta
+from apscheduler.schedulers.background import BackgroundScheduler
 
 garbage_files = []
 
+scheduler = BackgroundScheduler()
+scheduler.start()
+
 app = Flask(__name__)
 
-app.config["FILE_UPLOADS"] = r"C:\Users\Hassan\Documents\GitHub\djerty_website\client_files"
+app.config["FILE_UPLOADS"] = \
+    r"C:\Users\Hassan\Documents\GitHub\djerty_website\client_files"
+
 
 @app.route("/")
 @app.route("/home")
 def home():
     return render_template("index.html")
+
 
 @app.route("/huffman", methods=["POST", "GET"])
 def huffman():
@@ -23,25 +29,37 @@ def huffman():
             file = request.files['file']
             file.save(os.path.join(app.config["FILE_UPLOADS"], file.filename))
             compress_file(os.path.join(app.config["FILE_UPLOADS"], file.filename),
-                          os.path.join(app.config["FILE_UPLOADS"], file.filename.split('.')[0] + '.djerty'))
-            # os.remove(os.path.join(app.config["FILE_UPLOADS"], file.filename.split('.')[0] + '.djerty'))
+                          os.path.join(app.config["FILE_UPLOADS"],
+                                       file.filename.split('.')[0] + '.djerty'))
+            garbage_files.append(os.path.join(app.config['FILE_UPLOADS'],
+                                              file.filename.split('.')[0] +
+                                              '.djerty'))
+            scheduler.add_job(func=clear_garbage_files,
+                              next_run_time=datetime.now() +
+                                            timedelta(seconds=10))
             os.remove(os.path.join(app.config["FILE_UPLOADS"], file.filename))
-            return send_file(os.path.join(app.config["FILE_UPLOADS"], file.filename.split('.')[0] + '.djerty'))
+            return send_file(os.path.join(app.config["FILE_UPLOADS"],
+                                          file.filename.split('.')[0] +
+                                          '.djerty'))
     return render_template("huffman.html")
 
-def file_garbage_collection(path: str, t: int):
-    time.sleep(t)
-    os.remove(path)
+
+def clear_garbage_files():
+    for path in garbage_files:
+        try:
+            os.remove(path)
+        except FileNotFoundError:
+            continue
 
 
-@app.route("/get_file/<file_name>")
-def get_file(file_name):
-
-    try:
-        temp = send_from_directory(app.config["FILE_UPLOADS"], file_name)
-        return temp
-    except FileNotFoundError:
-        abort(404)
+# @app.route("/get_file/<file_name>")
+# def get_file(file_name):
+#
+#     try:
+#         temp = send_from_directory(app.config["FILE_UPLOADS"], file_name)
+#         return temp
+#     except FileNotFoundError:
+#         abort(404)
 
 @app.route("/linked-list", methods=["POST", "GET"])
 def linked():
@@ -94,4 +112,4 @@ def linked():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
