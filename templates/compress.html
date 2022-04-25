@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block title %}Huffman Compression/Decompression{% endblock %}
 {% block body %}
-<h1 style="text-align:center">Huffman Compression/Decompression</h1>
-<h4 style="text-align:center">Upload a file to compress or decompress it.</h4>
+<h1 style="text-align:center">Huffman Compression</h1>
+<h4 style="text-align:center">Upload a file to compress it.</h4>
 
 <!--<form action="/huffman" method="post" enctype="multipart/form-data" >-->
 <!--    <div class="form-group">-->
@@ -15,10 +15,10 @@
 <!--    <button type="submit" class="btn btn-primary">Compress!</button>-->
 <!--</form>-->
 
-<form action="/huffman" method="post" enctype="multipart/form-data">
+<form action="/huffman/compress" method="post" enctype="multipart/form-data">
     <div class="form-group">
-        <label for="file">File to compress/decompress</label>
-        <input type="file" class="form-control-file" id="file", name="file">
+        <label for="file">File to compress</label>
+        <input type="file" class="form-control-file" id="file" name="file">
     </div>
 
     <button type="submit" class="btn btn-primary">Compress!</button>
