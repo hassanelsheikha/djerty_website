@@ -21,12 +21,14 @@
         <input type="file" class="form-control-file" id="file" name="file">
     </div>
     <div>
-    <input type="text" name="value" id="value" placeholder="Extension (Default is .orig)">
+    <input type="text" name="extension" id="extension" placeholder="Extension (Default is .orig)">
     </div>
     <button type="submit" class="btn btn-primary">Decompress!</button>
 </form>
 
 {% if error == "NoFileError" %}
 <p style="color:red">Please select a file and try again.</p>
+{% elif error == "NotADjertyFile" %}
+<p style="color:red">Please upload a .djerty file.</p>
 {% endif %}
 {% endblock %}

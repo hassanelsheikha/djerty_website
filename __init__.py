@@ -23,8 +23,8 @@ def home():
     return render_template("index.html")
 
 
-@app.route("/huffman", methods=["POST", "GET"])
-def huffman():
+@app.route("/huffman/compress", methods=["POST", "GET"])
+def compress():
     if request.method == "POST":
         if request.files:
             try:
@@ -48,8 +48,49 @@ def huffman():
                                               file.filename.split('.')[0] +
                                               '.djerty'))
             except FileNotFoundError:
-                return render_template("huffman.html", error='NoFileError')
-    return render_template("huffman.html")
+                return render_template("compress.html", error='NoFileError')
+    return render_template("compress.html")
+
+
+@app.route("/huffman/decompress", methods=["POST", "GET"])
+def decompress():
+    if request.method == "POST":
+        if request.form['extension'] == '':
+            extension = '.orig'
+        elif request.form['extension'][0] != '.':
+            extension = '.' + request.form['extension']
+        elif request.form['extension'][-1] == '.':
+            extension = request.form['extension'][:-1]
+        else:
+            extension = request.form['extension']
+        if request.files:
+            try:
+                file = request.files['file']
+                if file.filename == '':
+                    return render_template("decompress.html", error='NoFileError')
+                elif file.filename[-7:] != '.djerty':
+                    return render_template('decompress.html', error="NotADjertyFile")
+                file.save(os.path.join(app.config["FILE_UPLOADS"],
+                                       file.filename))
+                decompress_file(os.path.join(app.config["FILE_UPLOADS"],
+                                           file.filename),
+                              os.path.join(app.config["FILE_UPLOADS"],
+                                           file.filename.split('.')[0] +
+                                           extension))
+                garbage_files.append(os.path.join(app.config['FILE_UPLOADS'],
+                                                  file.filename.split('.')[0] +
+                                                  extension))
+                scheduler.add_job(func=clear_garbage_files,
+                                  next_run_time=datetime.now() +
+                                                timedelta(seconds=10))
+                os.remove(os.path.join(app.config["FILE_UPLOADS"],
+                                       file.filename))
+                return send_file(os.path.join(app.config["FILE_UPLOADS"],
+                                              file.filename.split('.')[0] +
+                                              extension))
+            except FileNotFoundError:
+                return render_template("decompress.html", error='NoFileError')
+    return render_template("decompress.html")
 
 
 def clear_garbage_files():
