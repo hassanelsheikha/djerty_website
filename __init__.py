@@ -1,4 +1,5 @@
-from flask import Flask, redirect, url_for, render_template, request, flash, send_file, send_from_directory, abort
+from flask import Flask, render_template, request, \
+    flash, send_file, send_from_directory, abort
 from linked_list_simulator.linked_list import *
 from huffman_compressor.engine import *
 import os
@@ -28,7 +29,8 @@ def huffman():
         if request.files:
             file = request.files['file']
             file.save(os.path.join(app.config["FILE_UPLOADS"], file.filename))
-            compress_file(os.path.join(app.config["FILE_UPLOADS"], file.filename),
+            compress_file(os.path.join(app.config["FILE_UPLOADS"],
+                                       file.filename),
                           os.path.join(app.config["FILE_UPLOADS"],
                                        file.filename.split('.')[0] + '.djerty'))
             garbage_files.append(os.path.join(app.config['FILE_UPLOADS'],
@@ -41,6 +43,8 @@ def huffman():
             return send_file(os.path.join(app.config["FILE_UPLOADS"],
                                           file.filename.split('.')[0] +
                                           '.djerty'))
+        else:
+            return render_template("huffman.html", error='NoFileError')
     return render_template("huffman.html")
 
 
@@ -108,7 +112,7 @@ def linked():
                                        error='IndexError')
     else:
         return render_template("linked_list.html", empty=True,
-                               list='', error='')
+                               list='[]', error='')
 
 
 if __name__ == "__main__":

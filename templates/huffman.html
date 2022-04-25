@@ -17,10 +17,14 @@
 
 <form action="/huffman" method="post" enctype="multipart/form-data">
     <div class="form-group">
-        <label for="file">Select a file</label>
+        <label for="file">File to compress/decompress</label>
         <input type="file" class="form-control-file" id="file", name="file">
     </div>
+
     <button type="submit" class="btn btn-primary">Compress!</button>
 </form>
 
+{% if error == "NoFileError" %}
+<p style="color:red">Please select a file and try again.</p>
+{% endif %}
 {% endblock %}
