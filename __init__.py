@@ -152,13 +152,13 @@ def linked():
                 linkedlist.delete_at_index(int(request.form['value']))
                 return render_template("linked_list.html", ans=str(linkedlist),
                                        list=linkedlist.join())
-            except IndexError:  # if the item is not in the list
+            except:  # if the item is not in the list
                 return render_template("linked_list.html", ans=str(linkedlist),
                                        list=linkedlist.join(),
                                        error='IndexError')
     else:
         return render_template("linked_list.html", empty=True,
-                               list='[]', error='')
+                               list='', error='')
 
 
 @app.route("/hanoi", methods=["POST", "GET"])
