@@ -15,7 +15,7 @@ scheduler.start()
 app = Flask(__name__)
 
 app.config["FILE_UPLOADS"] = \
-    r"C:\Users\Hassan\Documents\GitHub\djerty_website\client_files"
+    r"/var/www/webApp/webApp/client_files"
 
 
 @app.route("/")
